@@ -5,6 +5,8 @@ import com.example.testproductservice.DTO.FakeStoreProductDTO;
 import com.example.testproductservice.DTO.ProductResponseDTO;
 import com.example.testproductservice.model.Product;
 import com.example.testproductservice.service.ProductService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -34,14 +36,16 @@ public class ProductController {
     }
 
     @GetMapping("/products/{id}")
-    public ProductResponseDTO getProductById(@PathVariable("id") int id) {
+    public ResponseEntity<ProductResponseDTO> getProductById(@PathVariable("id") int id) {
         //path variable will take the value from url and assign it to the function
-
-        ProductResponseDTO dto = new ProductResponseDTO();
         Product product = productService.getProductById(id);
-        //conversion from product to dto
+        if (product == null) {
+            return new ResponseEntity<>(null, HttpStatus.NO_CONTENT);
+        }
 
-        return convertProducttoResponseDTO(product);
+        //conversion from product to dto
+        ProductResponseDTO response = new ProductResponseDTO();
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     private ProductResponseDTO convertProducttoResponseDTO(Product product) {
