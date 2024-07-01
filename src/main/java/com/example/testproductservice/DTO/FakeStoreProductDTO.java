@@ -29,4 +29,19 @@ public class FakeStoreProductDTO {
         p.setCategory(c);
         return p;
     }
+
+    public void setTitle(String title) {
+    }
+
+    public void setImage(String image) {
+    }
+
+    public void setDescription(String description) {
+    }
+
+    public void setPrice(Double price) {
+    }
+
+    public void setCategory(String category) {
+    }
 }

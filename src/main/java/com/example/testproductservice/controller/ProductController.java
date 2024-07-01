@@ -1,12 +1,11 @@
 package com.example.testproductservice.controller;
 
+import com.example.testproductservice.DTO.CreateProductResponseDTO;
+import com.example.testproductservice.DTO.FakeStoreProductDTO;
 import com.example.testproductservice.DTO.ProductResponseDTO;
 import com.example.testproductservice.model.Product;
 import com.example.testproductservice.service.ProductService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.LinkedList;
@@ -21,9 +20,17 @@ public class ProductController {
         this.productService = productService;
     }
 
+
+    /************** Ist API************/
     @GetMapping("/products")
-    public String getAllProducts() {
-        return "All products";
+    public List<ProductResponseDTO> getAllProducts() {
+        List<ProductResponseDTO> dtoList = new ArrayList<>();
+        List<Product> products = productService.getAllProducts();
+        for (Product p : products) {
+            dtoList.add(convertProducttoResponseDTO(p));
+        }
+
+        return dtoList;
     }
 
     @GetMapping("/products/{id}")
@@ -53,7 +60,18 @@ public class ProductController {
     }
 
     @PostMapping("/products")
-    public void createProduct() {
+    public Product createProduct(@RequestBody CreateProductResponseDTO dto) {
 
+        /*
+        * things we need -
+        * title
+        * description
+        * image
+        * price
+        * category
+        * */
+        Product p = productService.createProduct(dto.getTitle(), dto.getDescription(), dto.getPrice(),dto.getCategory(), dto.getImage());
+
+        return p;
     }
 }
